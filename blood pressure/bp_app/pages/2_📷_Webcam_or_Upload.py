@@ -1,10 +1,27 @@
 import streamlit as st
 import numpy as np
-import cv2
 import tempfile
 import os
 import sys
 import time
+
+# Try to handle OpenCV import with special compatibility module
+try:
+    from utils.cv2_fix import ensure_opencv
+    cv2 = ensure_opencv()
+except Exception as e:
+    st.error(f"Failed to load OpenCV: {e}")
+    # Fallback to direct import as last resort
+    try:
+        import cv2
+    except ImportError:
+        st.error("Cannot import OpenCV (cv2). The app may not function correctly.")
+        # Create a dummy cv2 module with minimal functionality to prevent complete crashes
+        class DummyCV2:
+            def __getattr__(self, name):
+                return lambda *args, **kwargs: None
+        cv2 = DummyCV2()
+
 from utils.bp_utils import estimate_bp_from_frame, classify_blood_pressure
 
 # Add the parent directory to import from utils

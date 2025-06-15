@@ -4,4 +4,7 @@ libsm6
 libxext6
 libxrender-dev
 libgomp1
-libglib2.0-0
+ffmpeg
+libstdc++6
+libgtk2.0-dev
+pkg-config
