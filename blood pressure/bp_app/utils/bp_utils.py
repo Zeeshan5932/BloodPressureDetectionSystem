@@ -4,10 +4,15 @@ import asyncio
 import os
 import json
 import re
+import random
 from typing import Dict, Tuple, List, Optional
 
-# Import cv2 - should be installed via requirements.txt (opencv-python-headless==4.6.0.66)
-import cv2
+# Try to import OpenCV, but create fallbacks if not available
+try:
+    import cv2
+    OPENCV_AVAILABLE = True
+except ImportError:
+    OPENCV_AVAILABLE = False
 
 # Try to import OpenAI - we'll handle missing cases
 try:
@@ -49,24 +54,46 @@ def estimate_bp_from_frame(frame):
     if frame is None:
         raise ValueError("Frame is null.")
     
-    # In a real application, this would use a trained ML model
-    # Here we're simulating with a more sophisticated approach than just random
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    avg_pixel_val = np.mean(gray)
+    if not OPENCV_AVAILABLE:
+        # Fallback if OpenCV is not available - generate "realistic" random values
+        st.warning("OpenCV not available. Using simulated blood pressure values.")
+        base_systolic = 120
+        base_diastolic = 80
+        variation = random.uniform(-15, 15)
+        systolic = int(base_systolic + variation)
+        diastolic = int(base_diastolic + variation * 0.7)
+        
+        # Ensure values are in reasonable ranges
+        systolic = max(min(systolic, 190), 90)
+        diastolic = max(min(diastolic, 110), 60)
+        
+        return systolic, diastolic
     
-    # Use the average pixel value to generate "realistic" BP values
-    base_systolic = 120
-    base_diastolic = 80
-    
-    # Create variation based on image brightness
-    systolic = int(base_systolic + (avg_pixel_val - 128) / 12)
-    diastolic = int(base_diastolic + (avg_pixel_val - 128) / 18)
-    
-    # Ensure values are in reasonable ranges
-    systolic = max(min(systolic, 190), 90)
-    diastolic = max(min(diastolic, 110), 60)
-    
-    return systolic, diastolic
+    try:
+        # In a real application, this would use a trained ML model
+        # Here we're simulating with a more sophisticated approach than just random
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        avg_pixel_val = np.mean(gray)
+        
+        # Use the average pixel value to generate "realistic" BP values
+        base_systolic = 120
+        base_diastolic = 80
+        
+        # Create variation based on image brightness
+        systolic = int(base_systolic + (avg_pixel_val - 128) / 12)
+        diastolic = int(base_diastolic + (avg_pixel_val - 128) / 18)
+        
+        # Ensure values are in reasonable ranges
+        systolic = max(min(systolic, 190), 90)
+        diastolic = max(min(diastolic, 110), 60)
+        
+        return systolic, diastolic
+    except Exception as e:
+        # Fallback if anything fails with OpenCV processing
+        st.warning(f"Error processing image with OpenCV: {str(e)}. Using simulated values.")
+        systolic = random.randint(100, 140)
+        diastolic = random.randint(65, 90)
+        return systolic, diastolic
 
 # Function to classify blood pressure
 def classify_blood_pressure(systolic: int, diastolic: int) -> Dict:

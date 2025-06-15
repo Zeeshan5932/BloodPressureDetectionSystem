@@ -3,6 +3,14 @@ import asyncio
 import sys
 import os
 
+# Try to import OpenCV, but don't fail if it's not available
+try:
+    import cv2
+    OPENCV_AVAILABLE = True
+except ImportError:
+    OPENCV_AVAILABLE = False
+    # We'll handle missing OpenCV gracefully as we're mainly using it for display in this page
+
 # Add the parent directory to sys.path to allow importing from utils
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
@@ -173,12 +181,12 @@ with tab2:
         <ul>
             <li>Continue monitoring your blood pressure periodically</li>
             <li>Maintain a healthy lifestyle</li>
-            <li>Follow the personalized recommendations provided</li>
-        </ul>
+            <li>Follow the personalized recommendations provided</li>        </ul>
         """, unsafe_allow_html=True)
     
     st.markdown("</div>", unsafe_allow_html=True)
-      # Add educational content about blood pressure using Streamlit native components
+    
+    # Add educational content about blood pressure using Streamlit native components
     with st.expander("Blood Pressure Education", expanded=True):
         st.subheader("What is Blood Pressure?")
         st.write("Blood pressure is the force of blood pushing against the walls of your arteries. It's measured using two numbers:")
@@ -187,20 +195,33 @@ with tab2:
         
         st.subheader("Blood Pressure Categories")
         
-        # Using a Pandas DataFrame for better table presentation
-        import pandas as pd
-        
-        bp_categories = pd.DataFrame({
-            "Category": ["Low Blood Pressure", "Normal", "Elevated", "Hypertension Stage 1", 
-                        "Hypertension Stage 2", "Hypertensive Crisis"],
-            "Systolic (mmHg)": ["Lower than 90", "Less than 120", "120-129", "130-139", 
-                               "140 or higher", "Higher than 180"],
-            "Diastolic (mmHg)": ["Lower than 60", "Less than 80", "Less than 80", "80-89", 
-                                "90 or higher", "Higher than 120"]
-        })
-        
-        # Display the table with Streamlit's built-in table styling
-        st.table(bp_categories)
+        # Using a Pandas DataFrame for better table presentation if available, otherwise use a simple list
+        try:
+            import pandas as pd
+            PANDAS_AVAILABLE = True
+            
+            bp_categories = pd.DataFrame({
+                "Category": ["Low Blood Pressure", "Normal", "Elevated", "Hypertension Stage 1", 
+                            "Hypertension Stage 2", "Hypertensive Crisis"],
+                "Systolic (mmHg)": ["Lower than 90", "Less than 120", "120-129", "130-139", 
+                                "140 or higher", "Higher than 180"],
+                "Diastolic (mmHg)": ["Lower than 60", "Less than 80", "Less than 80", "80-89", 
+                                    "90 or higher", "Higher than 120"]
+            })
+            
+            # Display the table with Streamlit's built-in table styling
+            st.table(bp_categories)
+            
+        except ImportError:
+            # Fallback if pandas is not available
+            st.warning("Pandas is not installed. Displaying simplified blood pressure categories.")
+            
+            st.write("**Low Blood Pressure**: Systolic < 90 mmHg | Diastolic < 60 mmHg")
+            st.write("**Normal**: Systolic < 120 mmHg | Diastolic < 80 mmHg")
+            st.write("**Elevated**: Systolic 120-129 mmHg | Diastolic < 80 mmHg")
+            st.write("**Hypertension Stage 1**: Systolic 130-139 mmHg | Diastolic 80-89 mmHg")
+            st.write("**Hypertension Stage 2**: Systolic ≥ 140 mmHg | Diastolic ≥ 90 mmHg")
+            st.write("**Hypertensive Crisis**: Systolic > 180 mmHg | Diastolic > 120 mmHg")
 
 # Add a PDF download button
 with st.expander("Download your personalized health plan"):
