@@ -1,17 +1,36 @@
 import streamlit as st
+
+# Must be the first Streamlit command
+st.set_page_config(
+    page_title="Blood Pressure Detection - BP Fuel AI",
+    page_icon="📷",
+    layout="wide"
+)
+
+# Must be the first Streamlit command
+st.set_page_config(
+    page_title="Blood Pressure Detection - BP Fuel AI",
+    page_icon="📷",
+    layout="wide"
+)
+
 import numpy as np
 import tempfile
 import os
 import sys
 import time
 
+# Helper function for navigation
+def navigate_to(page):
+    st.switch_page(page)
+
 # Try to import OpenCV, handle gracefully if unavailable
 try:
     import cv2
     OPENCV_AVAILABLE = True
 except ImportError:
-    st.warning("⚠️ OpenCV (cv2) is not installed. Upload/Camera image analysis will be limited.")
     OPENCV_AVAILABLE = False
+    # We'll show a warning later, after page config
 
 # Add the parent directory to import from utils
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -19,17 +38,15 @@ sys.path.append(parent_dir)
 
 from utils.bp_utils import estimate_bp_from_frame, classify_blood_pressure
 
-st.set_page_config(
-    page_title="Blood Pressure Detection - BP Fuel AI",
-    page_icon="📷",
-    layout="wide"
-)
-
 # Load custom CSS
 css_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "styles.css")
 if os.path.exists(css_path):
     with open(css_path) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# Show warning if OpenCV is not available
+if not OPENCV_AVAILABLE:
+    st.warning("⚠️ OpenCV (cv2) is not installed. Upload/Camera image analysis will be limited to simulated values.")
 
 st.markdown("<h1 class='main-title'>📷 Blood Pressure Detection</h1>", unsafe_allow_html=True)
 st.markdown("<p class='subtitle'>Capture your facial image to analyze your blood pressure</p>", unsafe_allow_html=True)
@@ -39,8 +56,7 @@ if "questionnaire" not in st.session_state:
     st.warning("Please complete the questionnaire first!")
     st.info("To provide you with accurate blood pressure analysis and personalized recommendations, we need some information about you.")
     if st.button("Go to Questionnaire", use_container_width=True, type="primary"):
-        import streamlit as st_inner
-        st_inner.switch_page("pages/1_📝_Questionnaire.py")
+        navigate_to("pages/1_📝_Questionnaire.py")
     st.stop()
 
 with st.expander("How This Works", expanded=False):
@@ -92,14 +108,12 @@ with tab1:
                     st.subheader("Blood Pressure Analysis")
                     metric_col1, metric_col2 = st.columns(2)
                     metric_col1.metric("Systolic", s)
-                    metric_col2.metric("Diastolic", d)
-                    st.markdown(f"""<div style="color: {bp_classification['color']}; font-weight: bold; font-size: 1.3rem;">
+                    metric_col2.metric("Diastolic", d)                    st.markdown(f"""<div style="color: {bp_classification['color']}; font-weight: bold; font-size: 1.3rem;">
                         {bp_classification['category']}</div>""", unsafe_allow_html=True)
                     st.write(bp_classification['description'])
-
+                    
                     if st.button("Get Personalized Health Recommendations →", key="webcam_recommend", use_container_width=True, type="primary"):
-                        import streamlit as st_inner
-                        st_inner.switch_page("pages/3_💡_Health_Recommendations.py")
+                        navigate_to("pages/3_💡_Health_Recommendations.py")
 
             except Exception as e:
                 st.error(f"Error processing image: {str(e)}")
@@ -158,14 +172,12 @@ with tab2:
                     st.subheader("Blood Pressure Analysis")
                     metric_col1, metric_col2 = st.columns(2)
                     metric_col1.metric("Systolic", s)
-                    metric_col2.metric("Diastolic", d)
-                    st.markdown(f"""<div style="color: {bp_classification['color']}; font-weight: bold; font-size: 1.3rem;">
+                    metric_col2.metric("Diastolic", d)                    st.markdown(f"""<div style="color: {bp_classification['color']}; font-weight: bold; font-size: 1.3rem;">
                         {bp_classification['category']}</div>""", unsafe_allow_html=True)
                     st.write(bp_classification['description'])
-
+                    
                     if st.button("Get Personalized Health Recommendations →", key="upload_recommend", use_container_width=True, type="primary"):
-                        import streamlit as st_inner
-                        st_inner.switch_page("pages/3_💡_Health_Recommendations.py")
+                        navigate_to("pages/3_💡_Health_Recommendations.py")
 
 # Footer
 st.markdown("<h2 class='section-header'>Understanding the Technology</h2>", unsafe_allow_html=True)

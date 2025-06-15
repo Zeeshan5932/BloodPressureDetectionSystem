@@ -1,4 +1,12 @@
 import streamlit as st
+
+# Must be the first Streamlit command
+st.set_page_config(
+    page_title="Health Recommendations - BP Fuel AI",
+    page_icon="💡",
+    layout="wide"
+)
+
 import asyncio
 import sys
 import os
@@ -16,12 +24,6 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
 
 from utils.bp_utils import classify_blood_pressure, get_openai_recommendations, get_default_recommendations
-
-st.set_page_config(
-    page_title="Health Recommendations - BP Fuel AI",
-    page_icon="💡",
-    layout="wide"
-)
 
 # Load custom CSS
 css_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "styles.css")
