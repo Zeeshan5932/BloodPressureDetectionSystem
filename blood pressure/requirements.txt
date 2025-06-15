@@ -1,14 +1,14 @@
 streamlit==1.30.0
+opencv-python-headless==4.8.0.74
 streamlit-webrtc==0.47.1
-opencv-python-headless==4.8.1.78
 numpy==1.24.4
 av==10.0.0
 aiortc==1.6.0
 openai==1.10.0
 python-dotenv==1.0.0
-# Remove asyncio as it's part of Python's standard library
-# Additional dependencies that might be needed
 Pillow==10.0.0
-watchdog==3.0.0  # For improved file watching on Streamlit Cloud
-protobuf==3.20.3  # To avoid protobuf compatibility issues
+watchdog==3.0.0
+protobuf==3.20.3
 requests==2.31.0
+# Make sure these OpenCV-related packages are included
+matplotlib==3.7.2
