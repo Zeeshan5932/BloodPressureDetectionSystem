@@ -1,11 +1,13 @@
 import numpy as np
-import cv2
 import streamlit as st
 import asyncio
 import os
 import json
 import re
 from typing import Dict, Tuple, List, Optional
+
+# Import cv2 - should be installed via requirements.txt (opencv-python-headless==4.6.0.66)
+import cv2
 
 # Try to import OpenAI - we'll handle missing cases
 try:
