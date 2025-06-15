@@ -1,22 +1,13 @@
-# Core dependencies
 streamlit==1.30.0
-numpy==1.24.4
-Pillow==10.0.0
-
-# Use OpenCV alternatives that work better on Streamlit Cloud
-opencv-python-headless<4.7.0,>=4.5.0
-
-# Web camera and related dependencies
+opencv-python-headless==4.8.0.74
 streamlit-webrtc==0.47.1
+numpy==1.24.4
 av==10.0.0
 aiortc==1.6.0
-
-# API and utilities
 openai==1.10.0
 python-dotenv==1.0.0
-requests==2.31.0
-opencv-python
-# Supporting libraries
+Pillow==10.0.0
 watchdog==3.0.0
 protobuf==3.20.3
+requests==2.31.0
 matplotlib==3.7.2
