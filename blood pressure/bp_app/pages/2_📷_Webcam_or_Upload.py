@@ -4,7 +4,12 @@ import tempfile
 import os
 import sys
 import time
-import cv2  # ✅ Standard import now that opencv-python-headless is in requirements.txt
+
+try:
+    import cv2
+except ImportError:
+    st.error("OpenCV (cv2) is not installed. Please make sure `opencv-python-headless` is in requirements.txt.")
+    st.stop()
 
 from utils.bp_utils import estimate_bp_from_frame, classify_blood_pressure
 
