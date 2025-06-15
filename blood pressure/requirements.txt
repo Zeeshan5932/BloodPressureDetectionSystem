@@ -10,7 +10,4 @@ Pillow==10.0.0
 watchdog==3.0.0
 protobuf==3.20.3
 requests==2.31.0
-# Make sure these OpenCV-related packages are included
 matplotlib==3.7.2
-# install cv2
-opencv-python
