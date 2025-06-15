@@ -7,13 +7,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# Must be the first Streamlit command
-st.set_page_config(
-    page_title="Blood Pressure Detection - BP Fuel AI",
-    page_icon="📷",
-    layout="wide"
-)
-
 import numpy as np
 import tempfile
 import os
@@ -30,7 +23,6 @@ try:
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
-    # We'll show a warning later, after page config
 
 # Add the parent directory to import from utils
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -108,10 +100,11 @@ with tab1:
                     st.subheader("Blood Pressure Analysis")
                     metric_col1, metric_col2 = st.columns(2)
                     metric_col1.metric("Systolic", s)
-                    metric_col2.metric("Diastolic", d)                    st.markdown(f"""<div style="color: {bp_classification['color']}; font-weight: bold; font-size: 1.3rem;">
+                    metric_col2.metric("Diastolic", d)
+                    st.markdown(f"""<div style="color: {bp_classification['color']}; font-weight: bold; font-size: 1.3rem;">
                         {bp_classification['category']}</div>""", unsafe_allow_html=True)
                     st.write(bp_classification['description'])
-                    
+
                     if st.button("Get Personalized Health Recommendations →", key="webcam_recommend", use_container_width=True, type="primary"):
                         navigate_to("pages/3_💡_Health_Recommendations.py")
 
@@ -172,10 +165,11 @@ with tab2:
                     st.subheader("Blood Pressure Analysis")
                     metric_col1, metric_col2 = st.columns(2)
                     metric_col1.metric("Systolic", s)
-                    metric_col2.metric("Diastolic", d)                    st.markdown(f"""<div style="color: {bp_classification['color']}; font-weight: bold; font-size: 1.3rem;">
+                    metric_col2.metric("Diastolic", d)
+                    st.markdown(f"""<div style="color: {bp_classification['color']}; font-weight: bold; font-size: 1.3rem;">
                         {bp_classification['category']}</div>""", unsafe_allow_html=True)
                     st.write(bp_classification['description'])
-                    
+
                     if st.button("Get Personalized Health Recommendations →", key="upload_recommend", use_container_width=True, type="primary"):
                         navigate_to("pages/3_💡_Health_Recommendations.py")
 
