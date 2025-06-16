@@ -1,9 +1,9 @@
 import streamlit as st
 import os
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 try:
-    from dotenv import load_dotenv
     env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
     load_dotenv(dotenv_path=env_path)
     # We'll show this in the sidebar later
